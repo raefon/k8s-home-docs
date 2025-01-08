@@ -1,0 +1,54 @@
+---
+name: lint
+'on':
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  yamllint:
+    name: Yamllint
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install test dependencies.
+        run: pip3 install yamllint
+
+      - name: Lint all the YAMLs.
+        run: yamllint .
+
+  markdownlint:
+    name: Markdownlint
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v2
+
+      - name: Set up Node 14.
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install test dependencies.
+        run: npm install -g markdownlint-cli
+
+      - name: Lint all the markdown files.
+        run: markdownlint .
+
+  markdown-link-check:
+    name: Markdown link check
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: gaurav-nelson/github-action-markdown-link-check@v1
